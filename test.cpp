@@ -406,6 +406,9 @@ int main(){
                 bst->root = node;
                 bst->comp = comp;
                 tree_node *targetnode;
+                tree_node *test_node_one;
+                tree_node *test_node_two;
+                tree_node *test_node_three;
                 //std::cout<<"wrong\n";
                 insert_into_BST(bst,55,&targetnode);
                 insert_into_BST(bst,32,&targetnode);
@@ -413,14 +416,14 @@ int main(){
                 insert_into_BST(bst,61,&targetnode);
                 insert_into_BST(bst,61,&targetnode);
                 insert_into_BST(bst,61,&targetnode);
-                insert_into_BST(bst,61,&targetnode);
-                insert_into_BST(bst,29,&targetnode);
+                insert_into_BST(bst,61,&test_node_two);
+                insert_into_BST(bst,29,&test_node_one);
                 insert_into_BST(bst,36,&targetnode);
-                insert_into_BST(bst,36,&targetnode);
+                insert_into_BST(bst,36,&test_node_three);
                 insert_into_BST(bst,36,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
-                splay(bst, bst->root->l_child->l_child);
+                splay(bst, test_node_one);
                 //std::cout<<"------------------\n";
                 std::string *s1 = new std::string, *s2 = new std::string;
                 //preorder(bst, s1);
@@ -428,7 +431,7 @@ int main(){
                 //inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
                 int tree_c = 0;
-                if (!judge_splay(bst, tree_c)) throw e=1;
+                if (!judge_splay(bst, tree_c) || bst->root != test_node_one) throw e=1;
                 //std::string ans1="291143211350112363355189017614410022";
                 //std::string ans2="291143211336335011255186144901710022";
                 
@@ -444,12 +447,12 @@ int main(){
                 s1 = new std::string;
                 s2 = new std::string;
                 std::cout<<"------------------\n";
-                splay(bst, bst->root->r_child->r_child->r_child->r_child->l_child);
+                splay(bst, test_node_two);
                 // preorder(bst, s1);
                 // //std::cout<<*s1<<"\n";
                 // inorder(bst, s2);
                 tree_c = 0;
-                if (!judge_splay(bst, tree_c)) throw e=2;
+                if (!judge_splay(bst, tree_c) || bst->root!=test_node_two) throw e=2;
                 //std::cout<<*s2<<"\n";
                 // ans1="6141429173216501536335511901310022";
                 // ans2="2917321636335015551161414901310022";
@@ -464,14 +467,14 @@ int main(){
                 delete s2;
                 s1 = new std::string;
                 s2 = new std::string;
-                splay(bst, bst->root->l_child->r_child->r_child);
+                splay(bst, test_node_three);
                 //std::cout<<"------------------\n";
                 // preorder(bst, s1);
                 // //std::cout<<*s1<<"\n";
                 // inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
                 tree_c = 0;
-                if (!judge_splay(bst, tree_c)) throw e=3;
+                if (!judge_splay(bst, tree_c) || bst->root!=test_node_three) throw e=3;
                 // ans1="5011432152911363361485511901310022";
                 // ans2="2911321536335011455116148901310022";
                 // if (*s1!=ans1 || *s2!=ans2){    //judgement step 3
