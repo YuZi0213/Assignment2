@@ -8,6 +8,8 @@
 int comp(uint64_t a, uint64_t b);
 void inorder(BST * const bst, std::string *);
 void preorder(BST * const bst, std::string *);
+bool judge_splay(BST *bst, int &tree_count);
+
 int main(){
     /*
         This is the test for function add_node. 
@@ -421,37 +423,42 @@ int main(){
                 splay(bst, bst->root->l_child->l_child);
                 //std::cout<<"------------------\n";
                 std::string *s1 = new std::string, *s2 = new std::string;
-                preorder(bst, s1);
+                //preorder(bst, s1);
                 //std::cout<<*s1<<"\n";
-                inorder(bst, s2);
+                //inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
-                std::string ans1="291143211350112363355189017614410022";
-                std::string ans2="291143211336335011255186144901710022";
-                if (*s1!=ans1 || *s2!=ans2){      //judegement step 1
-                    delete s1;
-                    delete s2;
-                    e=1;
-                    throw e;
-                }
+                int tree_c = 0;
+                if (!judge_splay(bst, tree_c)) throw e=1;
+                //std::string ans1="291143211350112363355189017614410022";
+                //std::string ans2="291143211336335011255186144901710022";
+                
+                // if (*s1!=ans1 || *s2!=ans2){      //judegement step 1
+                //     delete s1;
+                //     delete s2;
+                //     e=1;
+                //     throw e;
+                // }
                 count++;
                 delete s1;
                 delete s2;
                 s1 = new std::string;
                 s2 = new std::string;
-                //std::cout<<"------------------\n";
+                std::cout<<"------------------\n";
                 splay(bst, bst->root->r_child->r_child->r_child->r_child->l_child);
-                preorder(bst, s1);
-                //std::cout<<*s1<<"\n";
-                inorder(bst, s2);
+                // preorder(bst, s1);
+                // //std::cout<<*s1<<"\n";
+                // inorder(bst, s2);
+                tree_c = 0;
+                if (!judge_splay(bst, tree_c)) throw e=2;
                 //std::cout<<*s2<<"\n";
-                ans1="6141429173216501536335511901310022";
-                ans2="2917321636335015551161414901310022";
-                if (*s1!=ans1 || *s2!=ans2){    //judgement step 2
-                    delete s1;
-                    delete s2;
-                    e=2;
-                    throw e;
-                }
+                // ans1="6141429173216501536335511901310022";
+                // ans2="2917321636335015551161414901310022";
+                // if (*s1!=ans1 || *s2!=ans2){    //judgement step 2
+                //     delete s1;
+                //     delete s2;
+                //     e=2;
+                //     throw e;
+                // }
                 count++;
                 delete s1;
                 delete s2;
@@ -459,18 +466,20 @@ int main(){
                 s2 = new std::string;
                 splay(bst, bst->root->l_child->r_child->r_child);
                 //std::cout<<"------------------\n";
-                preorder(bst, s1);
-                //std::cout<<*s1<<"\n";
-                inorder(bst, s2);
+                // preorder(bst, s1);
+                // //std::cout<<*s1<<"\n";
+                // inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
-                ans1="5011432152911363361485511901310022";
-                ans2="2911321536335011455116148901310022";
-                if (*s1!=ans1 || *s2!=ans2){    //judgement step 3
-                    delete s1;
-                    delete s2;
-                    e=3;
-                    throw e;
-                }
+                tree_c = 0;
+                if (!judge_splay(bst, tree_c)) throw e=3;
+                // ans1="5011432152911363361485511901310022";
+                // ans2="2911321536335011455116148901310022";
+                // if (*s1!=ans1 || *s2!=ans2){    //judgement step 3
+                //     delete s1;
+                //     delete s2;
+                //     e=3;
+                //     throw e;
+                // }
                 count++;
                 delete s1;
                 delete s2;
@@ -544,6 +553,33 @@ void preorder(BST * const bst, std::string *s){
     else return;
 };
 
+bool judge_splay(BST *bst, int &tree_c){
+    if (bst->root != NULL){
+        //std::cout<<bst->root->data<<" "<<bst->root->node_count<<" "<<bst->root->tree_count<<"\n";
+        tree_c += bst->root->node_count;
+        if (bst->root->l_child != NULL) {
+            if (bst->comp(bst->root->data, bst->root->l_child->data) < 0) return false;
+            BST *new_bst = new BST;
+            new_bst->comp = bst->comp;
+            new_bst->root = bst->root->l_child;
+            judge_splay(new_bst, tree_c);
+            delete new_bst;
+            new_bst = NULL;
+        }
+        if (bst->root->r_child != NULL) {
+            if (bst->comp(bst->root->data, bst->root->r_child->data) > 0) return false;
+            BST *new_bst = new BST;
+            new_bst->comp = bst->comp;
+            new_bst->root = bst->root->r_child;
+            judge_splay(new_bst, tree_c);
+            delete new_bst;
+            new_bst = NULL;
+        }
+        if (bst->root->tree_count != tree_c) return false; 
+     }
+    else return true;
+    return true;
+}
 /*
     author: 
         灵犀
