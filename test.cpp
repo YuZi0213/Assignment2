@@ -1,8 +1,8 @@
 #include"assign2.cpp"
 #include<iostream>
 #include<cstring>
-#include<Windows.h>	
-#include<iomanip>
+#include<Windows.h>
+#include<iomanip>  
 #include<vector>
 
 int comp(uint64_t a, uint64_t b);
@@ -13,6 +13,7 @@ int main(){
         This is the test for function add_node. 
     */
     // Part 1 - case 1
+    int count = 0;
     {
         tree_node * father = NULL;
         tree_node * child = NULL; 
@@ -20,6 +21,7 @@ int main(){
         e|=add_node(father, child, CHILD_DIRECTION_LEFT);
         try {
             if (e!=1) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 1, case1!  \033[0m\n";
@@ -39,9 +41,11 @@ int main(){
         e|=add_node(father, child, CHILD_DIRECTION_LEFT);
         try {
             if (e!=10) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 1, case2!  \033[0m\n";
+            
         }
         delete father;
         delete child;
@@ -60,6 +64,7 @@ int main(){
         e|=add_node(father, child, CHILD_DIRECTION_RIGHT);
         try {
             if (e!=4) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 1, case3! \033[0m\n";
@@ -81,6 +86,7 @@ int main(){
         e|=add_node(father, child, -1);
         try {
             if (e!=16) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 1, case4! \033[0m\n";
@@ -118,6 +124,7 @@ int main(){
         e|=add_node(father, r_child, CHILD_DIRECTION_RIGHT);
         try {
             if (father->l_child->data!=1 || father->r_child->data!=3) throw e;
+            count++;
             
         }
         catch(assign2_exception::exception){
@@ -140,6 +147,7 @@ int main(){
         e|=judge_child_direction(node, child_direction);
         try {
             if (e!=1) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 2, case1! \033[0m\n";
@@ -159,6 +167,7 @@ int main(){
         e|=judge_child_direction(node, child_direction);
         try {
             if (e!=32) throw e;
+            count++;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 2, case2! \033[0m\n";
@@ -201,6 +210,7 @@ int main(){
             if (*child_direction != CHILD_DIRECTION_LEFT) throw e;
             e|=judge_child_direction(r_child,  child_direction);
             if (*child_direction != CHILD_DIRECTION_RIGHT) throw e;
+            count++;
             
         }
         catch(assign2_exception::exception){
@@ -240,10 +250,12 @@ int main(){
                 insert_into_BST(bst,100,&targetnode);
 
                 std::string *s1 = new std::string, *s2 = new std::string;
-
+                
                 preorder(bst, s1);
+                //std::cout<<*s1<<"\n";
                 
                 inorder(bst, s2);
+                //std::cout<<*s2<<"\n";
                 std::string ans1="501832132911361155149013611110011";
                 std::string ans2="291132133611501855146111901310011";
                 if (*s1!=ans1 || *s2!=ans2){
@@ -251,11 +263,12 @@ int main(){
                     delete s2;
                     throw e;
                 }
+                count++;
                 delete s1;
                 delete s2;
         }
         catch(assign2_exception::exception){
-            std::cout<<"\033[41;11m Error in part 3, case1! \033[0m";
+            std::cout<<"\033[41;11m Error in part 3, case1! \033[0m\n";
         }
     }
 
@@ -291,24 +304,27 @@ int main(){
                 //std::cout<<"preorder:\n";
                 std::string *s1 = new std::string, *s2 = new std::string;
                 //std::cout<<"preorder:\n";
+                //std::cout<<"--------------------\n";
                 preorder(bst, s1);
                 //std::cout<<*s1<<"\n";
                 //std::cout<<"inorder:\n";
                 inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
                 // std::cout<<"\n";
-                std::string ans1="501832132911363155349013611110031";
-                std::string ans2="291132133631501855346111901310031";
+                //std::cout<<"-------------------\n";
+                std::string ans1="5011432152911363355389015611110033";
+                std::string ans2="2911321536335011455386111901510033";
                 if (*s1!=ans1 || *s2!=ans2){
                     delete s1;
                     delete s2;
                     throw e;
                 }
+                count++;
                 delete s1;
                 delete s2;
         }
         catch(assign2_exception::exception){
-            std::cout<<"\033[41;11m Error in part 3, case2! \033[0m";
+            std::cout<<"\033[41;11m Error in part 3, case2! \033[0m\n";
         }
     }
 
@@ -341,23 +357,31 @@ int main(){
                 tree_node **target_node = new tree_node*;
                 find_in_BST(bst, 1, target_node);
                 if (*target_node != NULL) e = 1, throw e; // judgement step 1.
+                count++;
                 find_in_BST(bst, 50, target_node);
                 if (*target_node==NULL || (*target_node)->data !=50) e = 2, throw e; // judgement step 2.
+                count++;
                 find_in_BST(bst, 55, target_node);
                 if (*target_node==NULL || (*target_node)->data !=55) e = 3, throw e; // judgement step 3.
+                count++;
                 find_in_BST(bst, 90, target_node);
                 if (*target_node==NULL || (*target_node)->data !=90) e = 4, throw e; // judgement step 4.
+                count++;
                 find_in_BST(bst, 61, target_node);
                 if (*target_node==NULL || (*target_node)->data !=61) e = 5, throw e; // judgement step 5.
+                count++;
                 find_in_BST(bst, 29, target_node);
                 if (*target_node==NULL || (*target_node)->data !=29) e = 6, throw e; // judgement step 6.
+                count++;
                 find_in_BST(bst, 36, target_node);
                 if (*target_node==NULL || (*target_node)->data !=36) e = 7, throw e; // judgement step 7.
+                count++;
                 find_in_BST(bst, 32, target_node);
                 if (*target_node==NULL || (*target_node)->data !=32) e = 8, throw e; // judgement step 8.
+                count++;
         }
         catch(assign2_exception::exception){
-            std::cout<<"\033[41;11m Error in part 4, case1! Happen in judgement step "<<e<<". \033[0m";
+            std::cout<<"\033[41;11m Error in part 4, case1! Happen in judgement step "<<e<<". \033[0m\n";
         }
     }
 
@@ -401,32 +425,34 @@ int main(){
                 //std::cout<<*s1<<"\n";
                 inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
-                std::string ans1="291850173212363155149013614110021";
-                std::string ans2="291832123631501755146141901310021";
+                std::string ans1="291143211350112363355189017614410022";
+                std::string ans2="291143211336335011255186144901710022";
                 if (*s1!=ans1 || *s2!=ans2){      //judegement step 1
                     delete s1;
                     delete s2;
                     e=1;
                     throw e;
                 }
+                count++;
                 delete s1;
                 delete s2;
                 s1 = new std::string;
                 s2 = new std::string;
-                splay(bst, bst->root->r_child->r_child->r_child->l_child);
                 //std::cout<<"------------------\n";
+                splay(bst, bst->root->r_child->r_child->r_child->r_child->l_child);
                 preorder(bst, s1);
                 //std::cout<<*s1<<"\n";
                 inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
-                ans1="614829155014321236315511901210021";
-                ans2="291532123631501455116148901210021";
+                ans1="6141429173216501536335511901310022";
+                ans2="2917321636335015551161414901310022";
                 if (*s1!=ans1 || *s2!=ans2){    //judgement step 2
                     delete s1;
                     delete s2;
                     e=2;
                     throw e;
                 }
+                count++;
                 delete s1;
                 delete s2;
                 s1 = new std::string;
@@ -437,24 +463,26 @@ int main(){
                 //std::cout<<*s1<<"\n";
                 inorder(bst, s2);
                 //std::cout<<*s2<<"\n";
-                ans1="551829145013321236316143901210021";
-                ans2="291432123631501355186143901210021";
+                ans1="5011432152911363361485511901310022";
+                ans2="2911321536335011455116148901310022";
                 if (*s1!=ans1 || *s2!=ans2){    //judgement step 3
                     delete s1;
                     delete s2;
                     e=3;
                     throw e;
                 }
+                count++;
                 delete s1;
                 delete s2;
         }
         catch(assign2_exception::exception){
-            std::cout<<"\033[41;11m Error in part 5, case1! Happen in judgement step "<<e<<". \033[0m";
+            std::cout<<"\033[41;11m Error in part 5, case1! Happen in judgement step "<<e<<". \033[0m\n";
         }
     }
-    std::cout<<"We have the same anwser.\n";
+    std::cout<<"The final result is "<<count<<"/21\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
+    std::cout<<"If you find any bug or any , please contact us.\n";
 }
 
 
@@ -516,6 +544,9 @@ void preorder(BST * const bst, std::string *s){
     else return;
 };
 
-/*autor: 
-    灵犀
+/*
+    author: 
+        灵犀
+    co-author:
+
 */
