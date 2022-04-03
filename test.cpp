@@ -1,14 +1,13 @@
 #include"assign2.cpp"
 #include<iostream>
 #include<cstring>
-#include<Windows.h>
 #include<iomanip>  
 #include<vector>
 
 int comp(uint64_t a, uint64_t b);
 void inorder(BST * const bst, std::string *);
 void preorder(BST * const bst, std::string *);
-bool judge_splay(BST *bst, int &tree_count);
+bool judge_bst(BST *bst, int &tree_count);
 
 int main(){
     /*
@@ -103,6 +102,7 @@ int main(){
         tree_node * father = new tree_node;
         tree_node * l_child = new tree_node; 
         tree_node * r_child = new tree_node;
+        tree_node * test_tree_count = new tree_node;
         father->data=2;
         father->l_child=NULL;
         father->r_child=NULL;
@@ -121,11 +121,23 @@ int main(){
         r_child->father=NULL;
         r_child->node_count=1;
         r_child->tree_count=1;
+        test_tree_count->data=4;
+        test_tree_count->l_child=NULL;
+        test_tree_count->r_child=NULL;
+        test_tree_count->father=NULL;
+        test_tree_count->node_count=1;
+        test_tree_count->tree_count=1;
         assign2_exception::exception e = 0;
         e|=add_node(father, l_child, CHILD_DIRECTION_LEFT);
         e|=add_node(father, r_child, CHILD_DIRECTION_RIGHT);
+        e|=add_node(r_child, test_tree_count, CHILD_DIRECTION_RIGHT);
+        BST *bst = new BST;
+        int root_tree_count = 0;
+        bst->root = r_child;
+        bst->comp = comp;
         try {
             if (father->l_child->data!=1 || father->r_child->data!=3) throw e;
+            if (!judge_bst(bst, root_tree_count) || root_tree_count != bst->root->tree_count) throw e;
             count++;
             
         }
@@ -135,7 +147,57 @@ int main(){
         delete father;
         delete l_child;
         delete r_child;
+        delete bst;
+        delete test_tree_count;
     }
+
+    // // Part 1 - case 6
+    {
+        tree_node * father = new tree_node;
+        tree_node * l_child = new tree_node; 
+        tree_node * r_child = new tree_node;
+        tree_node * test_tree_count = new tree_node;
+        father->data=2;
+        father->l_child=NULL;
+        father->r_child=NULL;
+        father->father=NULL;
+        father->node_count=1;
+        father->tree_count=1;
+        l_child->data=1;
+        l_child->l_child=NULL;
+        l_child->r_child=NULL;
+        l_child->father=NULL;
+        l_child->node_count=1;
+        l_child->tree_count=1;
+        r_child->data=3;
+        r_child->l_child=NULL;
+        r_child->r_child=NULL;
+        r_child->father=NULL;
+        r_child->node_count=1;
+        r_child->tree_count=1;
+        test_tree_count->data=4;
+        test_tree_count->l_child=NULL;
+        test_tree_count->r_child=NULL;
+        test_tree_count->father=NULL;
+        test_tree_count->node_count=1;
+        test_tree_count->tree_count=1;
+        assign2_exception::exception e = 0;
+        e|=add_node(father, l_child, CHILD_DIRECTION_LEFT);
+        e|=add_node(father, r_child, CHILD_DIRECTION_RIGHT);
+        try {
+            if (father->l_child->data!=1 || father->r_child->data!=3) throw e;
+            count++;
+            
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 1, case6! \033[0m\n";
+        }
+        delete father;
+        delete l_child;
+        delete r_child;
+        delete test_tree_count;
+    }
+
     /*
         This is the test for function judge_child_direction. 
     */
@@ -176,6 +238,7 @@ int main(){
         }
         delete node;
         delete father;
+        delete child_direction;
     }
 
     // Part 2 - case 3
@@ -221,6 +284,7 @@ int main(){
         delete father;
         delete l_child;
         delete r_child;
+        delete child_direction;
     }
 
     /*
@@ -242,7 +306,6 @@ int main(){
                 bst->root = node;
                 bst->comp = comp;
                 tree_node *targetnode;
-                //std::cout<<"wrong\n";
                 insert_into_BST(bst,55,&targetnode);
                 insert_into_BST(bst,32,&targetnode);
                 insert_into_BST(bst,90,&targetnode);
@@ -251,27 +314,28 @@ int main(){
                 insert_into_BST(bst,36,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
 
-                std::string *s1 = new std::string, *s2 = new std::string;
-                
-                preorder(bst, s1);
-                //std::cout<<*s1<<"\n";
-                
+                std::string *s1 = new std::string, *s2 = new std::string;                
+                preorder(bst, s1);               
                 inorder(bst, s2);
-                //std::cout<<*s2<<"\n";
                 std::string ans1="501832132911361155149013611110011";
                 std::string ans2="291132133611501855146111901310011";
                 if (*s1!=ans1 || *s2!=ans2){
                     delete s1;
                     delete s2;
+                    delete bst;
+                    delete node;
                     throw e;
                 }
                 count++;
                 delete s1;
                 delete s2;
+                delete bst;
+                delete node;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 3, case1! \033[0m\n";
         }
+        
     }
 
     // Part 3 - case 2
@@ -289,7 +353,6 @@ int main(){
                 bst->root = node;
                 bst->comp = comp;
                 tree_node *targetnode;
-                //std::cout<<"wrong\n";
                 insert_into_BST(bst,55,&targetnode);
                 insert_into_BST(bst,55,&targetnode);
                 insert_into_BST(bst,55,&targetnode);
@@ -303,27 +366,28 @@ int main(){
                 insert_into_BST(bst,36,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
-                //std::cout<<"preorder:\n";
+
+                // BST *new_bst = new BST;
+                // new_bst->root = targetnode;
+                // new_bst->comp = comp;
+                // insert_into_BST(new_bst, )
                 std::string *s1 = new std::string, *s2 = new std::string;
-                //std::cout<<"preorder:\n";
-                //std::cout<<"--------------------\n";
                 preorder(bst, s1);
-                //std::cout<<*s1<<"\n";
-                //std::cout<<"inorder:\n";
                 inorder(bst, s2);
-                //std::cout<<*s2<<"\n";
-                // std::cout<<"\n";
-                //std::cout<<"-------------------\n";
                 std::string ans1="5011432152911363355389015611110033";
                 std::string ans2="2911321536335011455386111901510033";
                 if (*s1!=ans1 || *s2!=ans2){
                     delete s1;
                     delete s2;
+                    delete bst;
+                    delete node;
                     throw e;
                 }
                 count++;
                 delete s1;
                 delete s2;
+                delete bst;
+                delete node;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 3, case2! \033[0m\n";
@@ -381,9 +445,11 @@ int main(){
                 find_in_BST(bst, 32, target_node);
                 if (*target_node==NULL || (*target_node)->data !=32) e = 8, throw e; // judgement step 8.
                 count++;
+                
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 4, case1! Happen in judgement step "<<e<<". \033[0m\n";
+            
         }
     }
 
@@ -424,77 +490,28 @@ int main(){
                 insert_into_BST(bst,100,&targetnode);
                 insert_into_BST(bst,100,&targetnode);
                 splay(bst, test_node_one);
-                //std::cout<<"------------------\n";
-                std::string *s1 = new std::string, *s2 = new std::string;
-                //preorder(bst, s1);
-                //std::cout<<*s1<<"\n";
-                //inorder(bst, s2);
-                //std::cout<<*s2<<"\n";
                 int tree_c = 0;
-                if (!judge_splay(bst, tree_c) || bst->root != test_node_one) throw e=1;
-                //std::string ans1="291143211350112363355189017614410022";
-                //std::string ans2="291143211336335011255186144901710022";
-                
-                // if (*s1!=ans1 || *s2!=ans2){      //judegement step 1
-                //     delete s1;
-                //     delete s2;
-                //     e=1;
-                //     throw e;
-                // }
+                if (!judge_bst(bst, tree_c) || bst->root != test_node_one) throw e=1;
                 count++;
-                delete s1;
-                delete s2;
-                s1 = new std::string;
-                s2 = new std::string;
                 std::cout<<"------------------\n";
                 splay(bst, test_node_two);
-                // preorder(bst, s1);
-                // //std::cout<<*s1<<"\n";
-                // inorder(bst, s2);
                 tree_c = 0;
-                if (!judge_splay(bst, tree_c) || bst->root!=test_node_two) throw e=2;
-                //std::cout<<*s2<<"\n";
-                // ans1="6141429173216501536335511901310022";
-                // ans2="2917321636335015551161414901310022";
-                // if (*s1!=ans1 || *s2!=ans2){    //judgement step 2
-                //     delete s1;
-                //     delete s2;
-                //     e=2;
-                //     throw e;
-                // }
+                if (!judge_bst(bst, tree_c) || bst->root!=test_node_two) throw e=2;
                 count++;
-                delete s1;
-                delete s2;
-                s1 = new std::string;
-                s2 = new std::string;
                 splay(bst, test_node_three);
-                //std::cout<<"------------------\n";
-                // preorder(bst, s1);
-                // //std::cout<<*s1<<"\n";
-                // inorder(bst, s2);
-                //std::cout<<*s2<<"\n";
                 tree_c = 0;
-                if (!judge_splay(bst, tree_c) || bst->root!=test_node_three) throw e=3;
-                // ans1="5011432152911363361485511901310022";
-                // ans2="2911321536335011455116148901310022";
-                // if (*s1!=ans1 || *s2!=ans2){    //judgement step 3
-                //     delete s1;
-                //     delete s2;
-                //     e=3;
-                //     throw e;
-                // }
+                if (!judge_bst(bst, tree_c) || bst->root!=test_node_three) throw e=3;
                 count++;
-                delete s1;
-                delete s2;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 5, case1! Happen in judgement step "<<e<<". \033[0m\n";
         }
     }
-    std::cout<<"The final result is "<<count<<"/21\n";
+    std::cout<<"The final result is "<<count<<"/22\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
     std::cout<<"If you find any bug or any , please contact us.\n";
+    return 0;
 }
 
 
@@ -556,7 +573,7 @@ void preorder(BST * const bst, std::string *s){
     else return;
 };
 
-bool judge_splay(BST *bst, int &tree_c){
+bool judge_bst(BST *bst, int &tree_c){
     if (bst->root != NULL){
         //std::cout<<bst->root->data<<" "<<bst->root->node_count<<" "<<bst->root->tree_count<<"\n";
         tree_c += bst->root->node_count;
@@ -565,16 +582,16 @@ bool judge_splay(BST *bst, int &tree_c){
             BST *new_bst = new BST;
             new_bst->comp = bst->comp;
             new_bst->root = bst->root->l_child;
-            judge_splay(new_bst, tree_c);
+            judge_bst(new_bst, tree_c);
             delete new_bst;
             new_bst = NULL;
         }
         if (bst->root->r_child != NULL) {
             if (bst->comp(bst->root->data, bst->root->r_child->data) > 0) return false;
             BST *new_bst = new BST;
-            new_bst->comp = bst->comp;
+            new_bst->comp = bst->comp;  
             new_bst->root = bst->root->r_child;
-            judge_splay(new_bst, tree_c);
+            judge_bst(new_bst, tree_c);
             delete new_bst;
             new_bst = NULL;
         }
