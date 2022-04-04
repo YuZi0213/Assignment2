@@ -159,7 +159,7 @@ int main(){
     // // Part 2 - case 1
    {
         tree_node * node;
-        node = NULL;
+        node = nullptr;
         int *child_direction = new int;
 
         assign2_exception::exception e = 0;
@@ -176,9 +176,8 @@ int main(){
 
     // Part 2 - case 2
    {
-        tree_node * node;
+        tree_node * node = new tree_node;
         tree_node * father = new tree_node;
-        node = new tree_node;
         node->father = NULL;
         int *child_direction = new int;
 
@@ -340,7 +339,7 @@ int main(){
                 bst->comp = comp;
                 bst->root = nullptr;
                 tree_node *targetnode;
-                for (int i = 100000; i >= 1; i--){
+                for (int i = 10000; i >= 1; i--){
                     insert_into_BST(bst, i, &targetnode);
                 }
 
@@ -364,7 +363,40 @@ int main(){
             std::cout<<"\033[41;11m Error in part 3, case3! \033[0m\n";
         }
     }
+    // Part 3 - case 4
+    {
+        assign2_exception::exception e = 0; 
+        tree_node *(*node) = new tree_node*;
+        try{
+            e|=insert_into_BST(nullptr, 1, node);
+            if (e!=1) throw e;
+            count++;
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 3, case4! \033[0m\n";
+        }
+        delete node;
+    }
 
+    // Part 3 - case 5
+    {
+        assign2_exception::exception e = 0; 
+        tree_node *(*node) = new tree_node*;
+        BST *bst = new BST;
+        bst->root = nullptr;
+        bst->comp = nullptr;
+        try{
+            e|=insert_into_BST(bst, 1, node);
+            if (e!=64) throw e;
+            count++;
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 3, case5! \033[0m\n";
+        }
+        delete node;
+        delete_tree(bst->root);
+        delete bst;
+    }
     /*
         This is the test case for part 4.
     */
@@ -422,6 +454,7 @@ int main(){
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 4, case1! Happen in judgement step "<<e<<". \033[0m\n";
         }
+        
     }
 
     /*
@@ -490,8 +523,9 @@ int main(){
             BST *bst = create_bst_test(father, comp);
             insert_into_BST(bst, 1, &target_node);
             splay(bst, bst->root->l_child);
-            if (bst->root!=father->father || bst->root->r_child!=father) delete_tree(bst->root), throw e; 
+            if (bst->root!=father->father || bst->root->r_child!=father) delete_tree(bst->root),delete bst, throw e; 
             count++;
+            delete_tree(bst->root),delete bst;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 5, case2!"<<". \033[0m\n";
@@ -514,7 +548,85 @@ int main(){
             std::cout<<"\033[41;11m Error in part 5, case3!"<<". \033[0m\n";
         }
     }
-    std::cout<<"The final result is "<<count<<"/25\n";
+
+    //Part 5 - case 4
+    {
+        assign2_exception::exception e = 0;
+        try
+        {
+            e|=splay(nullptr, nullptr);
+            if (e!=1) throw e;
+            count++; 
+        }
+        catch(assign2_exception::exception)
+        {
+            std::cout<<"\033[41;11m Error in part 5, case4!"<<". \033[0m\n";
+        }
+        
+    }
+
+    //Part 5 - case 5
+    {
+        assign2_exception::exception e = 0;
+        BST *bst = create_bst_test(nullptr, nullptr);
+        try
+        {
+            e|=splay(bst, nullptr);
+            if (e!=65) throw e;
+            count++; 
+        }
+        catch(assign2_exception::exception)
+        {
+            std::cout<<"\033[41;11m Error in part 5, case5!"<<". \033[0m\n";
+        }
+        delete bst;
+        
+    }
+    //Part 5 - case 6
+    {
+        assign2_exception::exception e = 0;
+        BST *bst = create_bst_test(nullptr, comp);
+        tree_node *node = create_tree_node(4);
+        try
+        {
+            e|=splay(bst, node);
+            if (e!=128) throw e;
+            count++; 
+        }
+        catch(assign2_exception::exception)
+        {
+            std::cout<<"\033[41;11m Error in part 5, case6!"<<". \033[0m\n";
+        }
+        delete bst;
+        delete node; 
+    }
+
+    //Part 5 - case 7
+    {
+        assign2_exception::exception e = 0;
+        BST *bst = create_bst_test(nullptr, comp);
+        tree_node *node = create_tree_node(4);
+        tree_node *(*target) = new tree_node*;
+        try
+        {
+            insert_into_BST(bst, 2, target);
+            insert_into_BST(bst, 4, target);
+
+            e|=splay(bst, node);
+            //std::cout<<e<<std::endl;
+            if (e==128) throw e;
+            count++; 
+        }
+        catch(assign2_exception::exception)
+        {
+            std::cout<<"\033[41;11m Error in part 5, case7!"<<". \033[0m\n";
+        }
+        delete_tree(bst->root);
+        delete bst;
+        delete node; 
+        delete target;
+    }
+    std::cout<<"The final result is "<<count<<"/31\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
     std::cout<<"If you find any bug or any wrong answer, please contact us.\n";
