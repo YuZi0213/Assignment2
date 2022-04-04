@@ -11,6 +11,8 @@ void delete_tree(tree_node * );
 bool judge_bst(BST *bst, int &tree_count);
 tree_node * create_tree_node_test(uint64_t data); 
 BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t));
+tree_node * find_root(tree_node * node);
+void delete_from_root(tree_node * node);
 
 int main(){
     /*
@@ -478,7 +480,41 @@ int main(){
             std::cout<<"\033[41;11m Error in part 5, case1! Happen in judgement step "<<e<<". \033[0m\n";
         }
     }
-    std::cout<<"The final result is "<<count<<"/23\n";
+
+    //Part 5 - case 2 //To test the zig and zag
+    {
+        assign2_exception::exception e = 0;
+        try{
+            tree_node * father = create_tree_node(2);
+            tree_node * target_node;
+            BST *bst = create_bst_test(father, comp);
+            insert_into_BST(bst, 1, &target_node);
+            splay(bst, bst->root->l_child);
+            if (bst->root!=father->father || bst->root->r_child!=father) delete_tree(bst->root), throw e; 
+            count++;
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 5, case2!"<<". \033[0m\n";
+        }
+    }
+
+    //Part 5 - case 3 //To test the zig and zag
+    {
+        assign2_exception::exception e = 0;
+        try{
+            tree_node * father = create_tree_node(2);
+            tree_node * target_node;
+            BST *bst = create_bst_test(father, comp);
+            insert_into_BST(bst, 3, &target_node);
+            splay(bst, bst->root->r_child);
+            if (bst->root!=father->father || bst->root->l_child!=father) delete_tree(bst->root), throw e; 
+            count++;
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 5, case3!"<<". \033[0m\n";
+        }
+    }
+    std::cout<<"The final result is "<<count<<"/25\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
     std::cout<<"If you find any bug or any wrong answer, please contact us.\n";
@@ -590,16 +626,29 @@ BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t)){
     return bst;
 };
 
-void delete_tree(tree_node * node){
+tree_node * find_root(tree_node * node){
+    while (node != nullptr){
+        if (node->father != nullptr) node = node->father;
+        else return node; 
+    }
+    return node;
+}
+
+void delete_from_root(tree_node * node){
     if (node != nullptr) {
         if (node->l_child != nullptr){
-            delete_tree(node->l_child);
+            delete_from_root(node->l_child);
         }
         if (node->r_child != nullptr){
-            delete_tree(node->r_child);
+            delete_from_root(node->r_child);
         }
         delete node;
     }
+}
+
+void delete_tree(tree_node * node){
+    node = find_root(node);
+    delete_from_root(node);
 };
 /*
     author: 
