@@ -457,6 +457,35 @@ int main(){
         
     }
 
+    // Part 4 - case 2
+    {
+        assign2_exception::exception e = 0;
+        try{
+            e|=find_in_BST(nullptr, 1, nullptr);
+            if (e!=1) throw e;
+            count++;
+        }
+        catch (assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 4, case2! \033[0m\n";
+        }
+    }
+
+    //Part 4 - case 3
+    {
+        assign2_exception::exception e = 0;
+        BST *bst = create_bst_test(nullptr, nullptr);
+        tree_node *(*target) = new tree_node*;
+        try{
+            e|=find_in_BST(bst, 1, target);
+            if (e!=64) throw e;
+            count++;
+        }
+        catch(assign2_exception::exception){
+            std::cout<<"\033[41;11m Error in part 4, case3! \033[0m\n";
+        }
+        delete bst;
+        delete target;
+    }
     /*
         This is the test case for part 5. 
     */
@@ -626,7 +655,7 @@ int main(){
         delete node; 
         delete target;
     }
-    std::cout<<"The final result is "<<count<<"/31\n";
+    std::cout<<"The final result is "<<count<<"/33\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
     std::cout<<"If you find any bug or any wrong answer, please contact us.\n";
