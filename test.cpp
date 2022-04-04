@@ -346,25 +346,15 @@ int main(){
                 // new_bst->root = targetnode;
                 // new_bst->comp = comp;
                 // insert_into_BST(new_bst, )
-                std::string *s1 = new std::string, *s2 = new std::string;
-                preorder(bst, s1);
- 
-                inorder(bst, s2);
-
-                std::string ans1="5011432152911363355389015611110033";
-                std::string ans2="2911321536335011455386111901510033";
                 int tree_c=0;
                 if (!judge_bst(bst,tree_c)){
-                    delete s1;
-                    delete s2;
+
                     delete_tree(bst->root);
                     delete bst;
                     
                     throw e;
                 }
                 count++;
-                delete s1;
-                delete s2;
                 delete_tree(bst->root);
                 delete bst;
         }
