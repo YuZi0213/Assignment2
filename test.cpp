@@ -8,6 +8,8 @@ int comp(uint64_t a, uint64_t b);
 void inorder(BST * const bst, std::string *);
 void preorder(BST * const bst, std::string *);
 bool judge_bst(BST *bst, int &tree_count);
+tree_node * create_tree_node_test(uint64_t data); 
+BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t));
 
 int main(){
     /*
@@ -16,10 +18,8 @@ int main(){
     // Part 1 - case 1
     int count = 0;
     {
-        tree_node * father = NULL;
-        tree_node * child = NULL; 
         assign2_exception::exception e = 0;
-        e|=add_node(father, child, CHILD_DIRECTION_LEFT);
+        e|=add_node(nullptr, nullptr, CHILD_DIRECTION_LEFT);
         try {
             if (e!=1) throw e;
             count++;
@@ -60,7 +60,7 @@ int main(){
         tree_node * father_right = new tree_node;
 
         father->r_child = father_right;
-        child->father = NULL;
+        child->father = nullptr;
         assign2_exception::exception e = 0;
         e|=add_node(father, child, CHILD_DIRECTION_RIGHT);
         try {
@@ -99,34 +99,10 @@ int main(){
 
     // // Part 1 - case 5
     {
-        tree_node * father = new tree_node;
-        tree_node * l_child = new tree_node; 
-        tree_node * r_child = new tree_node;
-        tree_node * test_tree_count = new tree_node;
-        father->data=2;
-        father->l_child=NULL;
-        father->r_child=NULL;
-        father->father=NULL;
-        father->node_count=1;
-        father->tree_count=1;
-        l_child->data=1;
-        l_child->l_child=NULL;
-        l_child->r_child=NULL;
-        l_child->father=NULL;
-        l_child->node_count=1;
-        l_child->tree_count=1;
-        r_child->data=3;
-        r_child->l_child=NULL;
-        r_child->r_child=NULL;
-        r_child->father=NULL;
-        r_child->node_count=1;
-        r_child->tree_count=1;
-        test_tree_count->data=4;
-        test_tree_count->l_child=NULL;
-        test_tree_count->r_child=NULL;
-        test_tree_count->father=NULL;
-        test_tree_count->node_count=1;
-        test_tree_count->tree_count=1;
+        tree_node * father = create_tree_node_test(2);
+        tree_node * l_child = create_tree_node_test(1); 
+        tree_node * r_child = create_tree_node_test(3);
+        tree_node * test_tree_count = create_tree_node_test(4);
         assign2_exception::exception e = 0;
         e|=add_node(father, l_child, CHILD_DIRECTION_LEFT);
         e|=add_node(father, r_child, CHILD_DIRECTION_RIGHT);
@@ -153,34 +129,10 @@ int main(){
 
     // // Part 1 - case 6
     {
-        tree_node * father = new tree_node;
-        tree_node * l_child = new tree_node; 
-        tree_node * r_child = new tree_node;
-        tree_node * test_tree_count = new tree_node;
-        father->data=2;
-        father->l_child=NULL;
-        father->r_child=NULL;
-        father->father=NULL;
-        father->node_count=1;
-        father->tree_count=1;
-        l_child->data=1;
-        l_child->l_child=NULL;
-        l_child->r_child=NULL;
-        l_child->father=NULL;
-        l_child->node_count=1;
-        l_child->tree_count=1;
-        r_child->data=3;
-        r_child->l_child=NULL;
-        r_child->r_child=NULL;
-        r_child->father=NULL;
-        r_child->node_count=1;
-        r_child->tree_count=1;
-        test_tree_count->data=4;
-        test_tree_count->l_child=NULL;
-        test_tree_count->r_child=NULL;
-        test_tree_count->father=NULL;
-        test_tree_count->node_count=1;
-        test_tree_count->tree_count=1;
+        tree_node * father = create_tree_node_test(2);
+        tree_node * l_child = create_tree_node_test(1); 
+        tree_node * r_child = create_tree_node_test(3);
+        tree_node * test_tree_count = create_tree_node_test(4);
         assign2_exception::exception e = 0;
         e|=add_node(father, l_child, CHILD_DIRECTION_LEFT);
         e|=add_node(father, r_child, CHILD_DIRECTION_RIGHT);
@@ -243,27 +195,9 @@ int main(){
 
     // Part 2 - case 3
     {
-        tree_node * father = new tree_node;
-        tree_node * l_child = new tree_node; 
-        tree_node * r_child = new tree_node;
-        father->data=2;
-        father->l_child=NULL;
-        father->r_child=NULL;
-        father->father=NULL;
-        father->node_count=1;
-        father->tree_count=1;
-        l_child->data=1;
-        l_child->l_child=NULL;
-        l_child->r_child=NULL;
-        l_child->father=NULL;
-        l_child->node_count=1;
-        l_child->tree_count=1;
-        r_child->data=3;
-        r_child->l_child=NULL;
-        r_child->r_child=NULL;
-        r_child->father=NULL;
-        r_child->node_count=1;
-        r_child->tree_count=1;
+        tree_node * father = create_tree_node_test(2);
+        tree_node * l_child = create_tree_node_test(1); 
+        tree_node * r_child = create_tree_node_test(3);
 
         int *child_direction = new int;
         assign2_exception::exception e = 0;
@@ -510,7 +444,7 @@ int main(){
     std::cout<<"The final result is "<<count<<"/22\n";
     std::cout<<"If you have patience, you can read my code and add some new test cases.\n";
     std::cout<<"Hope you a good score!\n";
-    std::cout<<"If you find any bug or any , please contact us.\n";
+    std::cout<<"If you find any bug or any wrong answer, please contact us.\n";
     return 0;
 }
 
@@ -548,7 +482,7 @@ void inorder(BST * const bst, std::string *s){
 };
 
 void preorder(BST * const bst, std::string *s){
-    if (bst->root != NULL){
+    if (bst->root != nullptr){
         //std::cout<<bst->root->data<<" "<<bst->root->node_count<<" "<<bst->root->tree_count<<"\n";
         s->append(std::to_string(bst->root->data));
         s->append(std::to_string(bst->root->node_count));
@@ -561,7 +495,7 @@ void preorder(BST * const bst, std::string *s){
             delete new_bst;
             new_bst = NULL;
         }
-        if (bst->root->r_child != NULL) {
+        if (bst->root->r_child != nullptr) {
             BST *new_bst = new BST;
             new_bst->comp = bst->comp;
             new_bst->root = bst->root->r_child;
@@ -600,9 +534,28 @@ bool judge_bst(BST *bst, int &tree_c){
     else return true;
     return true;
 }
+
+tree_node * create_tree_node_test(uint64_t data){
+    tree_node *node = new tree_node;
+    node->data = data;
+    node->node_count = 1;
+    node->tree_count = 1;
+    node->father = nullptr;
+    node->l_child = nullptr;
+    node->r_child = nullptr;
+    return node;
+}
+
+BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t)){
+    BST *bst = new BST;
+    bst->comp = comp;
+    bst->root = node;
+    return bst;
+};
 /*
     author: 
         灵犀
     co-author:
         方艺钧
 */
+
