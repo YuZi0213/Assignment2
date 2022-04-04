@@ -7,6 +7,7 @@
 int comp(uint64_t a, uint64_t b);
 void inorder(BST * const bst, std::string *);
 void preorder(BST * const bst, std::string *);
+void delete_tree(tree_node * );
 bool judge_bst(BST *bst, int &tree_count);
 tree_node * create_tree_node_test(uint64_t data); 
 BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t));
@@ -168,7 +169,7 @@ int main(){
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 2, case1! \033[0m\n";
         }
-        delete node;
+        delete child_direction;
     }
 
     // Part 2 - case 2
@@ -256,15 +257,15 @@ int main(){
                 if (*s1!=ans1 || *s2!=ans2){
                     delete s1;
                     delete s2;
+                    delete_tree(bst->root);
                     delete bst;
-                    delete node;
                     throw e;
                 }
                 count++;
                 delete s1;
                 delete s2;
+                delete_tree(bst->root);
                 delete bst;
-                delete node;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 3, case1! \033[0m\n";
@@ -313,15 +314,16 @@ int main(){
                 if (*s1!=ans1 || *s2!=ans2){
                     delete s1;
                     delete s2;
+                    delete_tree(bst->root);
                     delete bst;
-                    delete node;
+                    
                     throw e;
                 }
                 count++;
                 delete s1;
                 delete s2;
+                delete_tree(bst->root);
                 delete bst;
-                delete node;
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 3, case2! \033[0m\n";
@@ -359,31 +361,30 @@ int main(){
                 if (*target_node != NULL) e = 1, throw e; // judgement step 1.
                 count++;
                 find_in_BST(bst, 50, target_node);
-                if (*target_node==NULL || (*target_node)->data !=50) e = 2, throw e; // judgement step 2.
+                if (*target_node==NULL || (*target_node)->data !=50) delete_tree(bst->root), delete bst, e = 2, throw e; // judgement step 2.
                 count++;
                 find_in_BST(bst, 55, target_node);
-                if (*target_node==NULL || (*target_node)->data !=55) e = 3, throw e; // judgement step 3.
+                if (*target_node==NULL || (*target_node)->data !=55) delete_tree(bst->root), delete bst, e = 3, throw e; // judgement step 3.
                 count++;
                 find_in_BST(bst, 90, target_node);
-                if (*target_node==NULL || (*target_node)->data !=90) e = 4, throw e; // judgement step 4.
+                if (*target_node==NULL || (*target_node)->data !=90) delete_tree(bst->root), delete bst, e = 4, throw e; // judgement step 4.
                 count++;
                 find_in_BST(bst, 61, target_node);
-                if (*target_node==NULL || (*target_node)->data !=61) e = 5, throw e; // judgement step 5.
+                if (*target_node==NULL || (*target_node)->data !=61) delete_tree(bst->root), delete bst, e = 5, throw e; // judgement step 5.
                 count++;
                 find_in_BST(bst, 29, target_node);
-                if (*target_node==NULL || (*target_node)->data !=29) e = 6, throw e; // judgement step 6.
+                if (*target_node==NULL || (*target_node)->data !=29) delete_tree(bst->root), delete bst, e = 6, throw e; // judgement step 6.
                 count++;
                 find_in_BST(bst, 36, target_node);
-                if (*target_node==NULL || (*target_node)->data !=36) e = 7, throw e; // judgement step 7.
+                if (*target_node==NULL || (*target_node)->data !=36) delete_tree(bst->root), delete bst, e = 7, throw e; // judgement step 7.
                 count++;
                 find_in_BST(bst, 32, target_node);
-                if (*target_node==NULL || (*target_node)->data !=32) e = 8, throw e; // judgement step 8.
+                if (*target_node==NULL || (*target_node)->data !=32) delete_tree(bst->root), delete bst, e = 8, throw e; // judgement step 8.
                 count++;
-                
+                delete_tree(bst->root);
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 4, case1! Happen in judgement step "<<e<<". \033[0m\n";
-            
         }
     }
 
@@ -425,17 +426,18 @@ int main(){
                 insert_into_BST(bst,100,&targetnode);
                 splay(bst, test_node_one);
                 int tree_c = 0;
-                if (!judge_bst(bst, tree_c) || bst->root != test_node_one) throw e=1;
+                if (!judge_bst(bst, tree_c) || bst->root != test_node_one) delete_tree(bst->root), delete bst, throw e=1;
                 count++;
                 std::cout<<"------------------\n";
                 splay(bst, test_node_two);
                 tree_c = 0;
-                if (!judge_bst(bst, tree_c) || bst->root!=test_node_two) throw e=2;
+                if (!judge_bst(bst, tree_c) || bst->root!=test_node_two) delete_tree(bst->root), delete bst, throw e=2;
                 count++;
                 splay(bst, test_node_three);
                 tree_c = 0;
-                if (!judge_bst(bst, tree_c) || bst->root!=test_node_three) throw e=3;
+                if (!judge_bst(bst, tree_c) || bst->root!=test_node_three) delete_tree(bst->root), delete bst, throw e=3;
                 count++;
+                delete_tree(bst->root);
         }
         catch(assign2_exception::exception){
             std::cout<<"\033[41;11m Error in part 5, case1! Happen in judgement step "<<e<<". \033[0m\n";
@@ -551,6 +553,18 @@ BST * create_bst_test(tree_node *node, int (*comp)(uint64_t, uint64_t)){
     bst->comp = comp;
     bst->root = node;
     return bst;
+};
+
+void delete_tree(tree_node * node){
+    if (node != nullptr) {
+        if (node->l_child != nullptr){
+            delete_tree(node->l_child);
+        }
+        if (node->r_child != nullptr){
+            delete_tree(node->r_child);
+        }
+        delete node;
+    }
 };
 /*
     author: 
