@@ -338,7 +338,7 @@ int main(){
                 bst->comp = comp;
                 bst->root = nullptr;
                 tree_node *targetnode;
-                for (int i = 10000000; i >= 1; i--){
+                for (int i = 100000; i >= 1; i--){
                     insert_into_BST(bst, i, &targetnode);
                 }
 
