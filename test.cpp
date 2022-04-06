@@ -547,7 +547,7 @@ int main(){
     {
         assign2_exception::exception e = 0;
         try{
-            tree_node * father = create_tree_node(2);
+            tree_node * father = create_tree_node_test(2);
             tree_node * target_node;
             BST *bst = create_bst_test(father, comp);
             insert_into_BST(bst, 1, &target_node);
@@ -565,7 +565,7 @@ int main(){
     {
         assign2_exception::exception e = 0;
         try{
-            tree_node * father = create_tree_node(2);
+            tree_node * father = create_tree_node_test(2);
             tree_node * target_node;
             BST *bst = create_bst_test(father, comp);
             insert_into_BST(bst, 3, &target_node);
@@ -615,7 +615,7 @@ int main(){
     {
         assign2_exception::exception e = 0;
         BST *bst = create_bst_test(nullptr, comp);
-        tree_node *node = create_tree_node(4);
+        tree_node *node = create_tree_node_test(4);
         try
         {
             e|=splay(bst, node);
@@ -634,7 +634,7 @@ int main(){
     {
         assign2_exception::exception e = 0;
         BST *bst = create_bst_test(nullptr, comp);
-        tree_node *node = create_tree_node(4);
+        tree_node *node = create_tree_node_test(4);
         tree_node *(*target) = new tree_node*;
         try
         {
